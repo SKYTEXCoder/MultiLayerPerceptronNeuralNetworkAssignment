@@ -1,0 +1,2 @@
+# MLP (Multi Layer Perceptron) Neural Network Implemented From Scratch Using Python 3.11 and NumPy
+This is my very first and own personal attempt at implementing a simple multi-layer perceptron using NumPy.
