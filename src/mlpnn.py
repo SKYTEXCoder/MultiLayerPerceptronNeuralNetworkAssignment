@@ -194,7 +194,6 @@ for layer_index, (z, a) in enumerate(zip(pre_activations, activations[1:]), star
         )
     )
 
-
 print("\nProgram finished successfully.")
 
 print("\n")
