@@ -88,8 +88,16 @@ class MultiLayerPERCEPTRONNeuralNetwork:
         return returnedString
 
 csv_input_data_file_path = "data/dataNN_1.csv"
+
 try:
-    dataframe = pandas.read_csv(csv_input_data_file_path, sep=";", decimal=",")
+    if not isinstance(csv_input_data_file_path, str) or len(csv_input_data_file_path.strip()) == 0 or not csv_input_data_file_path.endswith(".csv"):
+        raise ValueError("Error: Either the provided CSV input data file path is invalid or it does not point to a CSV file.")
+    if csv_input_data_file_path == "data/dataNN_1.csv":
+        dataframe = pandas.read_csv(csv_input_data_file_path, sep=";", decimal=",")
+    elif csv_input_data_file_path == "data/dataNN_2.csv":
+        dataframe = pandas.read_csv(csv_input_data_file_path, sep=",", decimal=".")
+    else:
+        dataframe = pandas.read_csv(csv_input_data_file_path)
 except Exception as exception:
     raise RuntimeError(f"Failed to read the CSV file at path '{csv_input_data_file_path}': {exception}")
 
