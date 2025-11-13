@@ -31,9 +31,9 @@ class MultiLayerPERCEPTRONNeuralNetwork:
         self.rng = numpy.random.default_rng(seed)
         self.weights: List[numpy.ndarray] = []
         self.biases: List[numpy.ndarray] = []
-        self._initialize_weights_random()
+        self._initialize_weights_randomly()
         
-    def _initialize_weights_random(self):
+    def _initialize_weights_randomly(self):
         self.weights = []
         self.biases = []
         for index in range(1, len(self.layers)):

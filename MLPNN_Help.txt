@@ -1,0 +1,7 @@
+Penjelasan class/module Forward-Only MLPNN (Multi-Layer Perceptron Neural Network) yang telah ada di dalam project ini:
+
+Contoh Penggunaan:
+    mlpnn = MultiLayerPERCEPTRONNeuralNetwork([4, 3, 2], type_of_activation_function="sigmoid")
+    pre_activations, activations = mlpnn.feed_forward_pass(x_single) # dimana x_single adalah berbentuk (4,)
+    outputs = mlpnn.forward_batch(X_batch) # dimana X_batch adalah berbentuk (n_samples, 4)
+
