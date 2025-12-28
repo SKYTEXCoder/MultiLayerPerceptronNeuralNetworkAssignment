@@ -1,238 +1,114 @@
-# 🧠 Implementasi Forward-Only Multi-Layer Perceptron Neural Network dengan menggunakan bahasa Python dan library NumPy
+# 🧠 Multi-Layer Perceptron Neural Network (MLPNN): Backpropagation & Autoencoder
 
 ## 📋 Identitas Saya
 
-* **Nama:** Dandy Arya Akbar
-* **NIM:** 1313623028
-* **Jurusan:** S1 Ilmu Komputer, Universitas Negeri Jakarta (UNJ)
-* **Mata Kuliah:** Deep Learning
-* **Dosen Pengampu:** Med Irzal
-* **Semester:** 5
-* **Versi Python:** 3.11.x
+- **Nama:** Dandy Arya Akbar
+- **NIM:** 1313623028
+- **Jurusan:** S1 Ilmu Komputer, Universitas Negeri Jakarta (UNJ)
+- **Kelas:** 2023 A
+- **Mata Kuliah:** Deep Learning
 
 ---
 
 ## 📖 Deskripsi Project
 
-Proyek ini mengimplementasikan versi basic atau versi simplenya dari **Multi-Layer Perceptron Neural Network (MLPNN)** dengan model **Forward-Only** menggunakan **library NumPy**, sebagai bagian dari tugas mata kuliah Deep Learning. Tujuan utama proyek ini adalah untuk mendemonstrasikan pemahaman tentang bagaimana jaringan saraf bekerja **secara matematis** — mulai dari input data, melalui lapisan-lapisan neuron dengan bobot (weights) dan bias, hingga menghasilkan output — **tanpa melakukan proses pelatihan (training) atau backpropagation**.
+Project ini adalah implementasi lanjutan dari **Multi-Layer Perceptron (MLP)** yang dibangun dari nol (from scratch) menggunakan **Python** dan **NumPy**. project ini memperluas fungsi dasar _feed-forward_ dengan menambahkan algoritma **Backpropagation** untuk pelatihan (training) neural network , serta demonstrasi aplikasi **Autoencoder**.
 
-Program ini dapat memuat dataset dalam format CSV (`dataNN_1.csv` atau `dataNN_2.csv`), menginisialisasi bobot (weights) dan bias (biases) secara acak, menjalankan proses *feed-forward*, serta menampilkan output untuk setiap sampel input.
+Fitur Utama:
 
----
-
-## 🧩 Arsitektur Inti dari Neural Network
-
-Neural Network ini memiliki **3 lapisan utama**:
-
-| Lapisan | Deskripsi    | Jumlah Neuron |
-| ------- | ------------ | ------------- |
-| 0       | Input Layer  | 4             |
-| 1       | Hidden Layer | 3             |
-| 2       | Output Layer | 2             |
-
-**Fungsi Aktivasi:** Sigmoid Function
-
-Bobot dan bias diinisialisasi secara acak menggunakan **inisialisasi uniform Glorot/Xavier**, yang menjaga kestabilan variansi antar lapisan.
+1.  **Backpropagation Training**: Implementasi manual algoritma pelatihan menggunakan _Stochastic Gradient Descent (SGD)_ dan _Chain Rule_.
+2.  **Autoencoder**: Arsitektur neural network yang belajar merekonstruksi inputnya sendiri (kompresi data).
+3.  **Fleksibilitas**: Mendukung konfigurasi layer dinamis, fungsi aktivasi (Sigmoid/ReLU), dan pengaturan _learning rate_.
 
 ---
 
-## 🧠 Penjelasan Teori
+## 📂 Struktur Folder & File Utama
 
-### 🔹 Gambaran Umum Proses Forward Pass
-
-Proses *forward pass* adalah langkah di mana neural network mengambil vektor input dan menghitung output-nya dengan mempropagasikan data melalui setiap lapisan. Setiap lapisan melakukan operasi sebagai berikut:
-
-1. **Perhitungan Jumlah Tertimbang (Transformasi Linear)**
-
-   $$
-   z^{(l)} = W^{(l)} a^{(l-1)} + b^{(l)}
-   $$
-
-   Di mana:
-
-   * (W^{(l)}) adalah matriks bobot pada lapisan *l*.
-   * (b^{(l)}) adalah vektor bias.
-   * (a^{(l-1)}) adalah aktivasi dari lapisan sebelumnya.
-
-2. **Fungsi Aktivasi**
-
-   $$
-   a^{(l)} = f(z^{(l)})
-   $$
-
-   Di mana (f) adalah fungsi aktivasi yang digunakan (dalam proyek ini: Sigmoid Function).
-
-3. **Output Akhir**
-   Lapisan aktivasi terakhir menghasilkan prediksi akhir dari neural network.
-
-### 🔹 Tanpa Proses Training (Forward-Only)
-
-Implementasi Neural Network ini bersifat **forward-only**, yang berarti:
-
-* Hanya melakukan propagasi maju (*forward propagation*).
-* **Tidak** melakukan proses *backpropagation* atau pembaruan weights.
-* Menghasilkan output langsung berdasarkan bobot acak yang telah diinisialisasi.
+- **`src/mlpnn.py`**: Inti dari project. Berisi kelas `MultiLayerPERCEPTRONNeuralNetwork` dengan metode:
+  - `feed_forward_pass(x)`: Menghitung output layer per layer.
+  - `backpropagate_single_sample(x, y)`: Menghitung gradien dan memperbarui bobot (inti Backpropagation).
+  - `train(X, y)`: Melatih neural network selama sejumlah _epochs_.
+  - `predict(X)`: Melakukan prediksi setelah pelatihan.
+  - `sigmoid` & `sigmoid_derivative`: Fungsi aktivasi dan turunannya.
+- **`src/autoencoder_runner.py`**: Script driver untuk mendemonstrasikan Autoencoder. Melatih MLP untuk merekonstruksi data input (`dataNN_1.csv`).
+- **`tests/test_xor.py`**: Script verifikasi menggunakan masalah logika XOR (bukti pembelajaran non-linear).
+- **`tests/test_mlpnn.py`**: Unit tests untuk memastikan integritas struktur dasar.
 
 ---
 
-## 💻 Penjelasan Kode
+## 🚀 Panduan Penggunaan (Step-by-Step)
 
-### Definisi Module/Class Utama
+Berikut adalah langkah-langkah untuk menjalankan dan memverifikasi pekerjaan saya:
 
-```python
-class MultiLayerPERCEPTRONNeuralNetwork:
-    def __init__(self, layers, type_of_activation_function="sigmoid", seed=None):
-        ...
-```
+### 1. Menjalankan Demonstrasi Autoencoder
 
-Mendefinisikan arsitektur MLPNN dan menginisialisasi bobot serta bias secara acak menggunakan metode inisialisasi Glorot.
+Script ini akan memuat dataset, menormalisasi data, melatih Autoencoder untuk mengompresi data, dan menampilkan hasil rekonstruksi.
 
-### Fungsi Aktivasi
-
-```python
-def sigmoid(x):
-    return 1.0 / (1.0 + np.exp(-x))
-
-def relu(x):
-    return np.maximum(0, x)
-```
-
-Project ini mendukung penggunaan dari dan menyediakan dua tipe fungsi aktivasi: yaitu fungsi-fungsi **Sigmoid** dan **ReLU**, untuk keperluan eksperimen dan testing.
-
-### Proses Forward Pass
-
-```python
-def feed_forward_pass(self, x):
-    activations = [x.astype(float)]
-    for W, b in zip(self.weights, self.biases):
-        z = np.dot(activations[-1], W) + b
-        activations.append(self.activation(z))
-    return activations
-```
-
-Fungsi ini memproses satu vektor input melalui seluruh lapisan neural network dan mengembalikan hasil aktivasi dari setiap lapisan.
-
-### Proses Batch Forward
-
-```python
-def forward_batch(self, X):
-    activation = X.astype(float)
-    for W, b in zip(self.weights, self.biases):
-        activation = self.activation(np.dot(activation, W) + b)
-    return activation
-```
-
-Digunakan untuk menjalankan *forward pass* pada banyak sampel input secara bersamaan.
-
----
-
-## 🧾 File Dataset Input
-
-Dua dataset contoh disediakan di folder `data/`:
-
-| Nama File      | Simbol Desimal | Pemisah Kolom    |
-| -------------- | -------------- | ---------------- |
-| `dataNN_1.csv` | `,` (koma)     | `;` (titik koma) |
-| `dataNN_2.csv` | `.` (titik)    | `,` (koma)       |
-
-Program akan otomatis mendeteksi file yang digunakan dan menyesuaikan parameter pembacaan (*delimiter* dan *decimal symbol*).
-
----
-
-## ⚙️ Petunjuk Step-By-Step (Langkah Demi Langkah) Untuk Menjalankan Program
-
-### 📦 Prasyarat
-
-* Python **3.11.x** atau versi yang lebih baru
-* Library-Library Python Berikut Ini:
-
-  * `numpy`
-  * `pandas`
-
-Instal library yang diperlukan (jika belum terinstall) dengan perintah sebagai berikut:
+**Perintah:**
 
 ```bash
-pip install numpy pandas
+python src/autoencoder_runner.py
 ```
 
-### ▶️ Langkah Menjalankan Program
+**Apa yang diharapkan:**
 
-1. **Kloning atau ekstrak** folder proyek ini.
-2. Pastikan struktur folder kurang lebih seperti berikut ini:
+- Program akan menampilkan arsitektur `[4, 3, 4]` (Input 4 -> Hidden 3 -> Output 4).
+- Proses training berjalan selama 5000 epoch.
+- Pada akhirnya, program mencetak **MSE (Mean Squared Error)** yang sangat kecil (misal: ~0.006) dan membandingkan sampel asli dengan hasil rekonstruksi.
 
-   ```
-   project_root/
-   ├── src/
-   │   └── mlpnn.py
-   └── data/
-       ├── dataNN_1.csv
-       └── dataNN_2.csv
-   ```
-3. Buka terminal di direktori utama project ini (project root directory).
-4. Jalankan program python dengan perintah:
+### 2. Memverifikasi Algoritma Backpropagation (XOR Test)
 
-   ```bash
-   python src/mlpnn.py
-   ```
+Masalah XOR adalah standar emas untuk menguji apakah non-linearitas dan backpropagation berfungsi.
 
-### 🧠 Mengganti Dataset Input
+**Perintah:**
 
-Untuk mengganti dataset input, ubah baris berikut pada file `src/mlpnn.py`:
-
-```python
-csv_input_data_file_path = "data/dataNN_1.csv"
+```bash
+python tests/test_xor.py
 ```
 
-Menjadi:
+**Apa yang diharapkan:**
 
-```python
-csv_input_data_file_path = "data/dataNN_2.csv"
-```
+- Program melatih neural network kecil pada input logika `[[0,0], [0,1], [1,0], [1,1]]`.
+- Jika berhasil, output prediksi akan mendekati `[0, 1, 1, 0]`.
+- Akan muncul sebuah pesan **"SUCCESS: XOR Solved!"** jika loss akhir di bawah threshold.
 
-Dan sebaliknya. Program akan menyesuaikan pembacaan secara otomatis.
+### 3. Menjalankan Unit Tests (Quality Assurance)
 
-### 🧩 Contoh Output
+Untuk memastikan komponen dasar (fungsi aktivasi, inisialisasi bobot) valid.
 
-```
-Successfully loaded input dataset from 'data/dataNN_1.csv'.
-Multi-Layer PERCEPTRON Neural Network (MLPNN) Summary:
- Layer 0 -> 1 weights shape: (4, 3), biases shape: (3,)
- Layer 1 -> 2 weights shape: (3, 2), biases shape: (2,)
+**Perintah:**
 
-Running a feed forward pass for each sample...
-Sample 1: input=[29.602563  1.332298  2.970915 -1.250228] --> output=[0.319896 0.85951 ]
-...
-Program finished successfully.
+```bash
+python tests/test_mlpnn.py
 ```
 
 ---
 
-## 🧠 Ringkasan Teoretis
+## 🧠 Penjelasan Teknis Singkat
 
-* Proyek ini menunjukkan proses **komputasi maju (forward computation)** dari sebuah neural network menggunakan library NumPy.
-* Menjelaskan bagaimana **neuron, bobot, bias, dan aktivasi** berinteraksi secara matematis.
-* Bukan merupakan sebuah arsitektur neural network yang dapat dilakukan proses training (tidak ada logika, proses, atau algoritma backpropagation di sini).
+### Algoritma Backpropagation
+
+Saya mengimplementasikan Backpropagation menggunakan aturan rantai (_chain rule_):
+
+1.  **Hitung Error Output ($\delta^L$)**: Error antara prediksi dan target dikalikan turunan fungsi aktivasi.
+2.  **Propagasi Mundur Error ($\delta^l$)**: Error dari layer depan dikirim mundur ke layer sebelumnya: $\delta^l = (W^{l+1})^T \delta^{l+1} \odot \sigma'(z^l)$.
+3.  **Update Bobot**: Menggunakan _Gradient Descent_: $W^l \leftarrow W^l - \eta \cdot \delta^l (a^{l-1})^T$.
+
+### Autoencoder
+
+Autoencoder adalah MLP dimana **Target = Input**. Saya menggunakan arsitektur "bottleneck" (jumlah neuron hidden < input) untuk memaksa neural network mempelajari representasi data yang lebih ringkas (kompresi) sebelum mengembalikannya ke bentuk asli.
 
 ---
 
-## 🧾 Referensi
+## ✅ Catatan Penting
 
-* Goodfellow, I., Bengio, Y., & Courville, A. (2016). *Deep Learning*. MIT Press.
-* Nielsen, M. (2015). *Neural Networks and Deep Learning*. Determination Press.
-* Dokumentasi NumPy: [https://numpy.org/doc/](https://numpy.org/doc/)
-
----
-
-## ✅ Catatan-Catatan Penting
-
-* Output bersifat **deterministik** karena menggunakan *random seed* tetap (`seed=42`).
-* Program berjalan secara independen tanpa bergantung kepada library-library machine learning seperti TensorFlow, PyTorch, atau Keras.
-* Kedua jenis tipe dataset contoh (`dataNN_1.csv` dan `dataNN_2.csv`) didukung secara otomatis.
+- Kode menggunakan _seed_ acak tetap (`seed=42` atau `seed=100`) untuk hasil yang dapat direproduksi (deterministik).
+- Pastikan file data `dataNN_1.csv` berada di folder `data/` agar script-script saya dapat menemukannya.
 
 ---
 
 ### ✍️ Disusun oleh:
 
 **Dandy Arya Akbar**
-S1 Ilmu Komputer — Universitas Negeri Jakarta (UNJ)
-Mata Kuliah Deep Learning, Semester 5
+S1 Ilmu Komputer — 2023 A
+Universitas Negeri Jakarta

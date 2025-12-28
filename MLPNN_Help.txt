@@ -1,7 +1,54 @@
-Penjelasan class/module Forward-Only MLPNN (Multi-Layer Perceptron Neural Network) yang telah ada di dalam project ini:
+# Dokumentasi Teknis Singkat / Cheat Sheet
+# Multi-Layer Perceptron Neural Network (MLPNN)
 
-Contoh Penggunaan:
-    mlpnn = MultiLayerPERCEPTRONNeuralNetwork([4, 3, 2], type_of_activation_function="sigmoid")
-    pre_activations, activations = mlpnn.feed_forward_pass(x_single) # dimana x_single adalah berbentuk (4,)
-    outputs = mlpnn.forward_batch(X_batch) # dimana X_batch adalah berbentuk (n_samples, 4)
+--- IDENTITAS ---
+Nama: Dandy Arya Akbar
+NIM: 1313623028
+Kelas: 2023 A
 
+--- PEMBARUAN UTAMA ---
+Versi ini telah mendukung:
+1. BACKPROPAGATION (Pelatihan Neural Network)
+2. AUTOENCODER (Rekonstruksi Data)
+3. RELU & SIGMOID Activation
+4. Komentar dalam Bahasa Indonesia ("Saya...")
+
+--- CARA MENGGUNAKAN UTAMA (API) ---
+
+1. Inisialisasi Neural Network
+   from mlpnn import MultiLayerPERCEPTRONNeuralNetwork
+   
+   # Membuat MLP dengan 4 input, 5 hidden, 1 output
+   mlp = MultiLayerPERCEPTRONNeuralNetwork(
+       layers=[4, 5, 1],
+       type_of_activation_function="sigmoid", # atau "relu"
+       seed=42,
+       learning_rate=0.1
+   )
+
+2. Melatih Neural Network (Training)
+   # X_train: array numpy (n_samples, n_features)
+   # y_train: array numpy (n_samples, n_outputs)
+   
+   mlp.train(X_train, y_train, epochs=1000)
+
+3. Melakukan Prediksi
+   outputs = mlp.predict(X_new_data)
+
+--- MENJALANKAN PROGRAM ---
+
+A. DEMO AUTOENCODER:
+   Buka terminal di folder root project:
+   $ python src/autoencoder_runner.py
+
+B. VERIFIKASI BACKPROPAGATION (XOR):
+   $ python tests/test_xor.py
+
+C. UNIT TESTS:
+   $ python tests/test_mlpnn.py
+
+--- STRUKTUR FILE ---
+src/mlpnn.py             -> Kode utama Multi-Layer Perceptron Neural Network (Class & Algoritma)
+src/autoencoder_runner.py -> Script demonstrasi Autoencoder
+tests/test_xor.py        -> Script uji coba logika XOR
+data/                    -> Direktori file CSV input
